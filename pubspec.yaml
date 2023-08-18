@@ -30,7 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  # **************** PUB *******************
+  responsive_grid: ^2.4.2                   # <-- bootstrap like columns and rows
+  rxdart: ^0.27.7                           # <-- streams (form)
+  sqflite: ^2.3.0                           # <-- database 
+  path: ^1.8.3                              # <-- database path
+  path_provider: ^2.0.15                    # <-- database path directory
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
