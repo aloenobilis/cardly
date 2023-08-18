@@ -1,16 +1,54 @@
 # cardly
 
-A new Flutter project.
+## App Overview
 
-## Getting Started
+A simple starter design and app outline.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```text
+                                                CARDLY APP
+                                               ────────────
+┌─────────────────────────┐
+│ BANNDED COUNTRIES MODEL │
+│ + banned List<str>      │
+└──────────┬──────────────┘   ┌─────────────────────────────────────────────┐
+           │                  │                                             │
+           ▼                  │ ┌───────┐                                   │
+   Configure list of ─────────┤►├┼┼┼┼┼┼┼│                                   │
+   banned countries           │ │┼┼┼┼┼┼┼│                                   │
+                              │ └───────┘                                   │
+                              │                                             │
+                              │                                             │
+                              │ ┌─────────────────────────────────────────┐ │
+                              │ │    24                         6         │ │
+                              │ │  CARDS                    COUNTRIES     │ │
+                              │ │                                         │ │
+                              │ └─────────────────────────────────────────┘ │
+                              │                                             │
+                              │ ┌─────────────────────────────────────────┐ │
+    Card form input,          │ │    +                            +       │◄├──────── Camera captures card information
+    bottom up modal  ─────────┤►│ Input Card                Capture Card  │ │
+                              │ │                                         │ │
+                              │ └─────────────────────────────────────────┘ │
+                              │                                             │
+                              │                                             │              ┌─────────────────────────────┐
+    List view builder,        │                                             │              │                             │
+    sort cards by type,──────►│  Cards From Today:                          │              │ CARD MODEL                  │
+    created or country        │ ┌─────────────────────────────────────────┐ │              │ + card number               │
+                              │ │ ******** 45 6123                  VISA  ◄─┼──────────────┤ + card type                 │
+                              │ │ South Africa                            │ │              │ + cvv                       │
+                              │ └─────────────────────────────────────────┘ │              │ + issuing country           │
+                              │                                             │              │ + valid through (null=True) │
+                              │ ┌─────────────────────────────────────────┐ │              │ + card holder (null=True)   │
+                              │ │ ******** 09 1234              MASTERCARD│ │              │ + created                   │
+                              │ │ United Kingdom                          │ │              │                             │
+                              │ └─────────────────────────────────────────┘ │              └─────────────────────────────┘
+                              │                                             │
+                              │ ┌─────────────────────────────────────────┐ │
+                              │ │                                         │ │
+                              │ │                                         │ │
+                              │ └─────────────────────────────────────────┘ │
+                              │                                             │
+                              │                                             │
+                              │                                             │
+                              └─────────────────────────────────────────────┘
+```
