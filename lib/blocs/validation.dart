@@ -11,7 +11,7 @@ mixin Validation {
       handleData: (number, sink) {
     bool numberIsValid = Luhn().validate(number);
 
-    if (numberIsValid) {
+    if (numberIsValid && number.isNotEmpty) {
       sink.add(number);
     } else {
       sink.addError('Enter a valid card number');
@@ -39,8 +39,4 @@ mixin Validation {
       sink.addError("Select a country");
     }
   });
-
-  // country
-  // ensure its not the default value
-  // add an error to the error stream to show as error text widget
 }

@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:cardly/classes/response.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:cardly/blocs/validation.dart';
+import 'package:cardly/models/bankcard.dart';
+import 'package:cardly/resources/db_provider.dart';
 
 class CardBloc with Validation {
   // streams
@@ -26,20 +29,25 @@ class CardBloc with Validation {
       number, cvv, country, (String a, String b, String c) => true);
 
   // methods
-  Future<bool> addCardSubmit() async {
-    bool cardSuccessfullyAdded = false;
-
+  Future<BlocResponse> addCardSubmit(String? cardType) async {
     final validNumber = _number.value;
     final validCvv = _cvv.value;
     // TODO: ensure country is not in banned countries
     final validCountry = _country.value;
 
-    print("*" * 15);
-    print("NUMBER: $validNumber");
-    print("CVV: $validCvv");
-    print("COUNTRY: $validCountry");
+    BankCard card = BankCard(
+        number: validNumber,
+        cvv: validCvv,
+        cardType: cardType,
+        country: validCountry);
 
-    return cardSuccessfullyAdded;
+    DbProviderResponse response = await dbProvider.addCard(card);
+    return BlocResponse.fromDbProviderResponse(response);
+  }
+
+  Future<BlocResponse> getCards() async {
+    DbProviderResponse response = await dbProvider.getCards();
+    return BlocResponse.fromDbProviderResponse(response);
   }
 
   // dispose

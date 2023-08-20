@@ -42,7 +42,21 @@ DONE: card bloc and provider for "global state" <br/>
 DONE: add card screen and widgets (number, cvv and county fields) <br/>
 DONE: uitls luhn is from https://github.com/tiagohm/checkdigit/blob/master/lib/src/luhn.dart
 
+### 1.4 - database provider, set to state
+DONE: created DbProvider with getCards and addCard methods <br/>
+DONE: created BankCard model  <br/>
+DONE: updated HomeScreen to set all cards from the database to state <br/>
+DONE: updated AddCardScreen to infer the card type based on visa and mastercard regex <br/>
+DONE: added visa and mastercard asset images <br/>
+DONE: added dependency ```intl``` for data formatting 
+```yaml
+intl: ^0.18.1                             # <-- date formatting
+```
 
 
-STILL-TODO NOTE: CardBloc ensure country is not in banned countries
-NEXT: local database and models
+NEXT: 
+STILL-TODO NOTE: CardBloc ensure country is not in banned countries when adding card (model, screen)
+<br/>
+Capture Card From Camera 
+Styling And Error Messages
+Tests

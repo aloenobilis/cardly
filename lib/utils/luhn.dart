@@ -10,7 +10,7 @@ class Luhn {
       final digit = data.codeUnitAt(i) - 48;
 
       if (digit < 0 || digit > 9) {
-        throw ArgumentError('Digit at index $i must be a number');
+        throw ArgumentError('Only digits are valid input.');
       }
 
       if (isDouble) {

@@ -1,10 +1,13 @@
+import 'package:cardly/resources/db_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cardly/screens/add_card_screen.dart';
 import 'package:cardly/screens/home_screen.dart';
 import 'package:cardly/blocs/card_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dbProvider.init();
   runApp(const Cardly());
 }
 

@@ -22,6 +22,7 @@ Widget countryField(CardBloc bloc) {
           filled: true,
           // ignore: prefer_null_aware_operators
           errorText: snapshot.error == null ? null : snapshot.error.toString(),
+          prefixIcon: const Icon(Icons.flag),
         ),
       );
     },

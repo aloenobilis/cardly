@@ -12,6 +12,7 @@ Widget cvvField(CardBloc bloc) {
           hintStyle: TextStyle(color: Colors.grey[600]),
           hintText: '123',
           labelText: 'CVV',
+          prefixIcon: const Icon(Icons.password),
           // ignore: prefer_null_aware_operators
           errorText: snapshot.error == null ? null : snapshot.error.toString(),
         ),

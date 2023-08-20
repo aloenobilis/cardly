@@ -1,6 +1,13 @@
-import 'package:cardly/screens/add_card_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:intl/intl.dart';
+
+import 'package:cardly/blocs/card_bloc.dart';
+import 'package:cardly/blocs/card_provider.dart';
+import 'package:cardly/classes/response.dart';
+import 'package:cardly/models/bankcard.dart';
+import 'package:cardly/screens/add_card_screen.dart';
+import 'package:cardly/widgets/loader.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -16,6 +23,31 @@ class _HomeScreenState extends State<HomeScreen> {
   +++++++++++++++++++++++++ STATE ++++++++++++++++++++++++++++
   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isLoading = true;
+  List<BankCard> cards = [];
+  String? statNumberCountries;
+  String? statNumberCards;
+
+  void setCardsToState(CardBloc bloc) async {
+    BlocResponse? response;
+
+    if (isLoading) {
+      response = await bloc.getCards();
+    }
+
+    List<String> countries = [];
+    for (var item in response!.payload) {
+      countries.add(item.country);
+    }
+
+    // TODO: check and handle errors
+    setState(() {
+      statNumberCards = response!.payload.length.toString();
+      statNumberCountries = countries.toSet().toList().length.toString();
+      cards = response.payload;
+      isLoading = false;
+    });
+  }
 
   /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   +++++++++++++++++++++++++ WIDGETS ++++++++++++++++++++++++++
@@ -29,15 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
         lg: 12,
         child: ResponsiveGridRow(children: [
           ResponsiveGridCol(
-              xs: 6,
-              md: 6,
-              lg: 6,
-              child: const Center(child: Text("64 Cards"))),
+              child: const Center(child: Text("Session Statistics: "))),
           ResponsiveGridCol(
               xs: 6,
               md: 6,
               lg: 6,
-              child: const Center(child: Text("12 Countries"))),
+              child: Center(child: Text("$statNumberCards Cards"))),
+          ResponsiveGridCol(
+              xs: 6,
+              md: 6,
+              lg: 6,
+              child: Center(child: Text("$statNumberCountries Countries"))),
         ]));
   }
 
@@ -85,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ]));
   }
 
-  Widget cardItem() {
+  Widget cardItem(BankCard card) {
     return InkWell(
       onTap: () {},
       child: Card(
@@ -96,20 +130,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 xs: 12,
                 md: 12,
                 lg: 12,
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Card Number: ************** 1244"),
-                    Text("VISA")
+                    Text("Card Number: ${card.number}"),
+                    card.cardType == 'DEFAULT'
+                        ? const Text('...')
+                        : card.cardType == 'VISA'
+                            ? Image.asset(
+                                'assets/visa.png',
+                                scale: 5,
+                              )
+                            : Image.asset(
+                                'assets/mastercard.png',
+                                scale: 5,
+                              )
                   ],
                 )),
             ResponsiveGridCol(
-                xs: 12, md: 12, lg: 12, child: const Text("CVV: ***")),
+                xs: 12, md: 12, lg: 12, child: Text("CVV: ${card.cvv}")),
             ResponsiveGridCol(
                 xs: 12,
                 md: 12,
                 lg: 12,
-                child: const Text("Country: South Africa")),
+                child: Text("Country: ${card.country}")),
+            ResponsiveGridCol(
+                xs: 12,
+                md: 12,
+                lg: 12,
+                child: Text(
+                    "Added: ${DateFormat('dd/MM/yyyy, HH:mm').format(card.created!)}"))
           ]),
         ),
       ),
@@ -125,9 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 10,
+              itemCount: cards.length,
               itemBuilder: (BuildContext context, int index) {
-                return cardItem();
+                return cardItem(cards[index]);
               }),
         ],
       ),
@@ -163,6 +213,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /*------------^------------*
+    * ------- CardBloc --------*
+    * ------------+------------*/
+    final CardBloc bloc = CardProvider.of(context);
+    /*------------^------------*/
+
+    if (isLoading) {
+      setCardsToState(bloc);
+      return loader();
+    }
+
     return Scaffold(
       key: scaffoldKey,
       drawer: drawer(),
@@ -176,12 +237,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: ResponsiveGridRow(children: [
-          // STATS
-          stats(),
           // BUTTONS
           buttons(),
+          // STATS
+          stats(),
           // CARDS FROM TODAY LIST
-          ResponsiveGridCol(child: cardList())
+          ResponsiveGridCol(
+              child: cards.isEmpty ? const Text("No cards") : cardList()),
         ]),
       ),
     );
