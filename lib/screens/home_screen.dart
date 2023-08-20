@@ -1,3 +1,4 @@
+import 'package:cardly/screens/add_card_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
@@ -54,7 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
               lg: 6,
               child: Center(
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddCardScreen()));
+                  },
                   icon: const Icon(
                     Icons.add,
                     size: 24.0,

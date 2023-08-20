@@ -33,3 +33,16 @@ path_provider: ^2.0.15                    # <-- database path directory
 ### 1.2 - home screen outline (ui) 
 DONE: created ``HomeScreen`` and layed out some very basic ui components such as the stats, buttons and card list. <br/>
 DONE: added the drawer component and settings icon using a global key for the configuration setting of banned countries.
+
+
+### 1.3 add card screen, bloc, validation
+This adds the UI and streams functionality for adding a card. <br/>
+DONE: validation.dart - validators for the streams <br/>
+DONE: card bloc and provider for "global state" <br/>
+DONE: add card screen and widgets (number, cvv and county fields) <br/>
+DONE: uitls luhn is from https://github.com/tiagohm/checkdigit/blob/master/lib/src/luhn.dart
+
+
+
+STILL-TODO NOTE: CardBloc ensure country is not in banned countries
+NEXT: local database and models
