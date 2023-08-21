@@ -68,12 +68,12 @@ class _AddCardScreenState extends State<AddCardScreen> {
               } else {
                 setState(() => cardType = CardIssuers.kdefault);
               }
-
               bloc.changeNumber(number);
             }
           },
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
+            border: const OutlineInputBorder(),
             hintStyle: TextStyle(color: Colors.grey[600]),
             hintText: '1234 4567 8910 1112',
             labelText: 'Card Number',
@@ -125,6 +125,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
     );
   }
 
+  Widget kpadding(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     /*------------^------------*
@@ -144,9 +151,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
       ),
       body: SingleChildScrollView(
         child: ResponsiveGridRow(children: [
-          ResponsiveGridCol(child: numberField(bloc)),
-          ResponsiveGridCol(child: cvvField(bloc)),
-          ResponsiveGridCol(child: countryField(bloc)),
+          ResponsiveGridCol(child: kpadding(numberField(bloc))),
+          ResponsiveGridCol(child: kpadding(cvvField(bloc))),
+          ResponsiveGridCol(child: kpadding(countryField(bloc))),
           ResponsiveGridCol(
               child: errorMessage == null
                   ? const Text('')

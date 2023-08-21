@@ -83,6 +83,9 @@ Once you run flutter build ios a Podfile and Podfile.lock will be created for yo
 - Comment out the use_frameworks! line from under Podfile of your Flutter project.  You can find this Podfile under your_flutter_project/ios/Podfile
 
 
+### 1.9 - styling 
+DONE: added styling and padding where needed <br/>
+
 <br/>
-Styling And Error Messages
+Styling
 Tests

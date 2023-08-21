@@ -9,6 +9,7 @@ Widget cvvField(CardBloc bloc) {
         onChanged: bloc.changeCvv,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
+          border: const OutlineInputBorder(),
           hintStyle: TextStyle(color: Colors.grey[600]),
           hintText: '123',
           labelText: 'CVV',

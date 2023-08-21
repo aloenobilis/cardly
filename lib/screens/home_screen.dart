@@ -73,17 +73,45 @@ class _HomeScreenState extends State<HomeScreen> {
         lg: 12,
         child: ResponsiveGridRow(children: [
           ResponsiveGridCol(
-              child: const Center(child: Text("Session Statistics: "))),
+              xs: 6,
+              md: 6,
+              lg: 6,
+              child: Center(
+                  child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: '$statNumberCards \n',
+                  style: const TextStyle(
+                      fontSize: 32,
+                      color: Colors.teal,
+                      fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                        text: 'Cards',
+                        style: TextStyle(fontSize: 14, color: Colors.black54)),
+                  ],
+                ),
+              ))),
           ResponsiveGridCol(
               xs: 6,
               md: 6,
               lg: 6,
-              child: Center(child: Text("$statNumberCards Cards"))),
-          ResponsiveGridCol(
-              xs: 6,
-              md: 6,
-              lg: 6,
-              child: Center(child: Text("$statNumberCountries Countries"))),
+              child: Center(
+                  child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: '$statNumberCards \n',
+                  style: const TextStyle(
+                      fontSize: 32,
+                      color: Colors.teal,
+                      fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                        text: 'Countries',
+                        style: TextStyle(fontSize: 14, color: Colors.black54)),
+                  ],
+                ),
+              ))),
         ]));
   }
 
@@ -159,45 +187,48 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget cardItem(BankCard card) {
     return InkWell(
       onTap: () {},
-      child: Card(
-        child: Container(
-          padding: const EdgeInsets.all(4),
-          child: ResponsiveGridRow(children: [
-            ResponsiveGridCol(
-                xs: 12,
-                md: 12,
-                lg: 12,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Card Number: ${card.number}"),
-                    card.cardType == CardIssuers.kdefault
-                        ? const Text('...')
-                        : card.cardType == CardIssuers.visa
-                            ? Image.asset(
-                                'assets/visa.png',
-                                scale: 5,
-                              )
-                            : Image.asset(
-                                'assets/mastercard.png',
-                                scale: 5,
-                              )
-                  ],
-                )),
-            ResponsiveGridCol(
-                xs: 12, md: 12, lg: 12, child: Text("CVV: ${card.cvv}")),
-            ResponsiveGridCol(
-                xs: 12,
-                md: 12,
-                lg: 12,
-                child: Text("Country: ${card.country}")),
-            ResponsiveGridCol(
-                xs: 12,
-                md: 12,
-                lg: 12,
-                child: Text(
-                    "Added: ${DateFormat('dd/MM/yyyy, HH:mm').format(card.created!)}"))
-          ]),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
+        child: Card(
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            child: ResponsiveGridRow(children: [
+              ResponsiveGridCol(
+                  xs: 12,
+                  md: 12,
+                  lg: 12,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Card Number: ${card.number}"),
+                      card.cardType == CardIssuers.kdefault
+                          ? const Text('...')
+                          : card.cardType == CardIssuers.visa
+                              ? Image.asset(
+                                  'assets/visa.png',
+                                  scale: 5,
+                                )
+                              : Image.asset(
+                                  'assets/mastercard.png',
+                                  scale: 5,
+                                )
+                    ],
+                  )),
+              ResponsiveGridCol(
+                  xs: 12, md: 12, lg: 12, child: Text("CVV: ${card.cvv}")),
+              ResponsiveGridCol(
+                  xs: 12,
+                  md: 12,
+                  lg: 12,
+                  child: Text("Country: ${card.country}")),
+              ResponsiveGridCol(
+                  xs: 12,
+                  md: 12,
+                  lg: 12,
+                  child: Text(
+                      "Added: ${DateFormat('dd/MM/yyyy, HH:mm').format(card.created!)}"))
+            ]),
+          ),
         ),
       ),
     );
@@ -208,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text("Cards from this session: "),
+          // const Text("Cards from this session: "),
           ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -246,6 +277,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  ResponsiveGridCol kpadding() {
+    return ResponsiveGridCol(
+        child: const Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     /*------------^------------*
@@ -272,10 +310,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: ResponsiveGridRow(children: [
-          // BUTTONS
-          buttons(),
           // STATS
           stats(),
+          kpadding(),
+          // BUTTONS
+          buttons(),
+          kpadding(),
           // CARDS FROM TODAY LIST
           errorMessageGetCards == null
               ? ResponsiveGridCol(

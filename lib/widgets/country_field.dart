@@ -18,6 +18,7 @@ Widget countryField(CardBloc bloc) {
         },
         value: initialCountryValue,
         decoration: InputDecoration(
+          border: const OutlineInputBorder(),
           contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
           filled: true,
           // ignore: prefer_null_aware_operators

@@ -42,6 +42,13 @@ class _BannedCountriesScreenState extends State<BannedCountriesScreen> {
     }
   }
 
+  Widget kpadding(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+      child: child,
+    );
+  }
+
   Widget bannedCountryField(BannedCountriesBloc bloc) {
     return StreamBuilder(
       stream: bloc.country,
@@ -61,6 +68,7 @@ class _BannedCountriesScreenState extends State<BannedCountriesScreen> {
           },
           value: initialCountryValue,
           decoration: InputDecoration(
+            border: const OutlineInputBorder(),
             contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
             filled: true,
             errorText:
@@ -93,22 +101,32 @@ class _BannedCountriesScreenState extends State<BannedCountriesScreen> {
             }
           }
         },
-        child: const Text("Add"));
+        child: const Text("Add Country"));
   }
 
   Widget bannedCountriesList() {
     return SingleChildScrollView(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Banned Countries: "),
+          Divider(),
+          kpadding(
+            const Text(
+              "Banned Countries",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.start,
+            ),
+          ),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: bannedCountries!.countries!.length,
             itemBuilder: (BuildContext conetxt, int index) {
-              return ListTile(
-                subtitle: Text(bannedCountries!.countries![index]),
-              );
+              return kpadding(Text(
+                "- ${bannedCountries!.countries![index]}",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ));
             },
           )
         ],
@@ -136,15 +154,18 @@ class _BannedCountriesScreenState extends State<BannedCountriesScreen> {
       ),
       body: SingleChildScrollView(
         child: ResponsiveGridRow(children: [
-          ResponsiveGridCol(child: bannedCountryField(bloc)),
+          ResponsiveGridCol(child: kpadding(bannedCountryField(bloc))),
           ResponsiveGridCol(
               child: errorMessageAddBannedCountry == null
-                  ? const Text('')
+                  ? Container()
                   : Text(
                       errorMessageAddBannedCountry!,
                       style: const TextStyle(color: Colors.red),
                     )),
-          ResponsiveGridCol(child: addBannedCountrySubmitButton(bloc)),
+          ResponsiveGridCol(
+              child: Center(
+            child: addBannedCountrySubmitButton(bloc),
+          )),
           ResponsiveGridCol(
               child: errorMessageGetBannedCountries == null
                   ? bannedCountriesList()
