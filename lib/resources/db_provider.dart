@@ -85,17 +85,27 @@ class DbProvider {
   /// Queries the ``BankCard`` table for the ``BankCard.number`` prior to inserting
   /// a card to ensure that the card doesn't already exist - the error message
   /// is propogated by the DbProviderResponse, as is the payload.
+  /// Checks if the ``BankCard.country`` is in the "BannedCountries" table.
   Future<DbProviderResponse> addCard(BankCard bankcard) async {
     List<Map<String, dynamic>>? duplicates = await db!.query('BankCard',
         columns: ['number'], where: "number = ?", whereArgs: [bankcard.number]);
 
     if (duplicates.isEmpty) {
-      int id = await db!.insert('BankCard', bankcard.toMapForDb());
-      if (id != 0) {
-        return DbProviderResponse(payload: true);
-      } else {
+      DbProviderResponse response = await getBannedCountry();
+
+      if (response.payload.countries.contains(bankcard.country)) {
+        // error: cards country is in banned countries
         return DbProviderResponse(
-            payload: null, errorMessage: "There was an error adding a card");
+            payload: null, errorMessage: "The card's country is banned.");
+      } else {
+        int id = await db!.insert('BankCard', bankcard.toMapForDb());
+
+        if (id != 0) {
+          return DbProviderResponse(payload: true);
+        } else {
+          return DbProviderResponse(
+              payload: null, errorMessage: "There was an error adding a card");
+        }
       }
     } else {
       return DbProviderResponse(

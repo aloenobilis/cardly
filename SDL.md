@@ -58,9 +58,11 @@ DONE: banned countries model (.countries List<String> -> TEXT :> jsonEncode|json
 DONE: banned countries bloc and provider (method: add, get) <br/>
 DONE: banned countries screen for adding and viewing banned countries 
 
+### 1.6 - add card banned country check 
+DONE: in DbProvider.addCard, prior to adding the card, the country is checked in banned countries. 
+
 
 <br/>
-Ensure when adding a card that its not within banned countries 
 Ensure cards are only shown from session (x hours)
 Capture Card From Camera 
 Styling And Error Messages
