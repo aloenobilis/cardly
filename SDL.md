@@ -61,6 +61,16 @@ DONE: banned countries screen for adding and viewing banned countries
 ### 1.6 - add card banned country check 
 DONE: in DbProvider.addCard, prior to adding the card, the country is checked in banned countries. 
 
+### 1.7 - cards within session time 
+DONE: created ```DbProvider.SESSION_LENGTH_HOURS = 8``` which ensures that only cards from the
+previous 8 hours will be shown. 
+DONE: getCards error handling in HomeScreen 
+ 
+
+- GET CARDS
+    - only return cards from session
+    - handle error
+
 
 <br/>
 Ensure cards are only shown from session (x hours)

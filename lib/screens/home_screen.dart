@@ -26,8 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoading = true;
   List<BankCard> cards = [];
-  String? statNumberCountries;
-  String? statNumberCards;
+  String? statNumberCountries = '0';
+  String? statNumberCards = '0';
+  String? errorMessageGetCards;
 
   void setCardsToState(CardBloc bloc) async {
     BlocResponse? response;
@@ -36,18 +37,26 @@ class _HomeScreenState extends State<HomeScreen> {
       response = await bloc.getCards();
     }
 
-    List<String> countries = [];
-    for (var item in response!.payload) {
-      countries.add(item.country);
-    }
+    if (response != null) {
+      if (response.payload != null) {
+        List<String> countries = [];
+        for (var item in response.payload) {
+          countries.add(item.country);
+        }
 
-    // TODO: check and handle errors
-    setState(() {
-      statNumberCards = response!.payload.length.toString();
-      statNumberCountries = countries.toSet().toList().length.toString();
-      cards = response.payload;
-      isLoading = false;
-    });
+        setState(() {
+          statNumberCards = response!.payload.length.toString();
+          statNumberCountries = countries.toSet().toList().length.toString();
+          cards = response.payload;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          errorMessageGetCards = response!.errorMessage;
+          isLoading = false;
+        });
+      }
+    }
   }
 
   /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -241,8 +250,14 @@ class _HomeScreenState extends State<HomeScreen> {
           // STATS
           stats(),
           // CARDS FROM TODAY LIST
-          ResponsiveGridCol(
-              child: cards.isEmpty ? const Text("No cards") : cardList()),
+          errorMessageGetCards == null
+              ? ResponsiveGridCol(
+                  child: cards.isEmpty ? const Text("No cards") : cardList())
+              : ResponsiveGridCol(
+                  child: Text(
+                  errorMessageGetCards!,
+                  style: const TextStyle(color: Colors.red),
+                )),
         ]),
       ),
     );

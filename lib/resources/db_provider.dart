@@ -11,6 +11,8 @@ import 'package:cardly/classes/response.dart';
 
 class DbProvider {
   Database? db;
+  // ignore: non_constant_identifier_names
+  final int SESSION_LENGTH_HOURS = 8;
 
   Future<void> init() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
@@ -113,9 +115,9 @@ class DbProvider {
     }
   }
 
+  /// Gets all cards from the database within a sessions time frame,
+  /// see ```SESSION_LENGTH_HOURS``` for setting the session length.
   Future<DbProviderResponse> getCards() async {
-    // TODO: only return cards from a session (12 hours)
-
     List<BankCard> cards = [];
 
     try {
@@ -124,13 +126,20 @@ class DbProvider {
 
       // ignore: unnecessary_null_comparison
       if (maps != null) {
+        DateTime now = DateTime.now();
+        DateTime start = DateTime(now.year, now.month, now.day,
+            now.hour - SESSION_LENGTH_HOURS, now.minute, now.second);
+
         for (var card in maps) {
-          cards.add(BankCard.fromDb(card));
+          BankCard bankcard = BankCard.fromDb(card);
+          if (bankcard.created!.isAfter(start)) {
+            cards.add(BankCard.fromDb(card));
+          }
         }
       }
     } catch (err) {
-      // TODO: handle get cards with error response
-      print("ERROR DB PROVIDER: $err");
+      return DbProviderResponse(
+          payload: null, errorMessage: "Could not retreive cards");
     }
 
     cards = cards.reversed.toList();
