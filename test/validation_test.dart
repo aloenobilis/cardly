@@ -1,6 +1,4 @@
 import 'package:test/test.dart';
-import 'package:rxdart/rxdart.dart';
-
 import 'package:cardly/blocs/card_bloc.dart';
 
 void main() {

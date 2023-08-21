@@ -110,7 +110,7 @@ class _BannedCountriesScreenState extends State<BannedCountriesScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(),
+          const Divider(),
           kpadding(
             const Text(
               "Banned Countries",
@@ -125,7 +125,8 @@ class _BannedCountriesScreenState extends State<BannedCountriesScreen> {
             itemBuilder: (BuildContext conetxt, int index) {
               return kpadding(Text(
                 "- ${bannedCountries!.countries![index]}",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ));
             },
           )
