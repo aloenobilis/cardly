@@ -32,7 +32,6 @@ class CardBloc with Validation {
   Future<BlocResponse> addCardSubmit(String? cardType) async {
     final validNumber = _number.value;
     final validCvv = _cvv.value;
-    // TODO: ensure country is not in banned countries
     final validCountry = _country.value;
 
     BankCard card = BankCard(

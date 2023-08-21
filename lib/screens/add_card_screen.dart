@@ -1,3 +1,4 @@
+import 'package:cardly/classes/card_issuers.dart';
 import 'package:cardly/classes/response.dart';
 import 'package:cardly/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,11 @@ import 'package:cardly/widgets/country_field.dart';
 
 class AddCardScreen extends StatefulWidget {
   static const String id = 'add_card_screen';
-  const AddCardScreen({super.key});
+
+  const AddCardScreen({super.key, this.paramCardNumber, this.paramCardIssuer});
+
+  final String? paramCardNumber;
+  final String? paramCardIssuer;
 
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
@@ -21,15 +26,31 @@ class _AddCardScreenState extends State<AddCardScreen> {
   final RegExp _visa = RegExp(r'^4[0-9]{12}(?:[0-9]{3})?$');
   final RegExp _master = RegExp(r'^5[1-5][0-9]{14}$');
 
+  TextEditingController controller = TextEditingController();
+  bool isLoading = true;
   String? cardType;
-  final String kVisa = 'VISA';
-  final String kMasterCard = 'MASTERCARD';
-  final String kDefault = 'DEFAULT';
 
   @override
   void initState() {
     super.initState();
-    cardType = kDefault;
+  }
+
+  void initialzeStateAndBlocFromParamaters(CardBloc bloc) {
+    if (isLoading) {
+      if (widget.paramCardIssuer != null && widget.paramCardNumber != null) {
+        setState(() {
+          cardType = widget.paramCardIssuer;
+          isLoading = false;
+        });
+        controller.text = widget.paramCardNumber!;
+        bloc.changeNumber(widget.paramCardNumber!);
+      } else {
+        setState(() {
+          cardType = CardIssuers.kdefault;
+          isLoading = false;
+        });
+      }
+    }
   }
 
   Widget numberField(CardBloc bloc) {
@@ -37,14 +58,15 @@ class _AddCardScreenState extends State<AddCardScreen> {
       stream: bloc.number,
       builder: (context, snapshot) {
         return TextField(
+          controller: controller,
           onChanged: (String? number) {
             if (number != null) {
               if (_visa.hasMatch(number)) {
-                setState(() => cardType = kVisa);
+                setState(() => cardType = CardIssuers.visa);
               } else if (_master.hasMatch(number)) {
-                setState(() => cardType = kMasterCard);
+                setState(() => cardType = CardIssuers.mastercard);
               } else {
-                setState(() => cardType = kDefault);
+                setState(() => cardType = CardIssuers.kdefault);
               }
 
               bloc.changeNumber(number);
@@ -55,9 +77,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
             hintStyle: TextStyle(color: Colors.grey[600]),
             hintText: '1234 4567 8910 1112',
             labelText: 'Card Number',
-            prefixIcon: cardType == 'DEFAULT'
+            prefixIcon: cardType == CardIssuers.kdefault
                 ? const Icon(Icons.credit_card)
-                : cardType == 'VISA'
+                : cardType == CardIssuers.visa
                     ? Image.asset(
                         'assets/visa.png',
                         scale: 5,
@@ -110,6 +132,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
     * ------------+------------*/
     final CardBloc bloc = CardProvider.of(context);
     /*------------^------------*/
+
+    if (isLoading) {
+      initialzeStateAndBlocFromParamaters(bloc);
+    }
 
     return Scaffold(
       appBar: AppBar(

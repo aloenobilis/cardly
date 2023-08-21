@@ -65,15 +65,24 @@ DONE: in DbProvider.addCard, prior to adding the card, the country is checked in
 DONE: created ```DbProvider.SESSION_LENGTH_HOURS = 8``` which ensures that only cards from the
 previous 8 hours will be shown. 
 DONE: getCards error handling in HomeScreen 
- 
 
-- GET CARDS
-    - only return cards from session
-    - handle error
+
+### 1.8 - card capture
+DONE: on card capture the card number and issuer are passed as screen paramaters which then poopulate state and the CardBloc.number stream. <br/>
+DONE: created CardIssuers class (DRY) <br/>
+DONE: upgraded minSdkVersion to 21 <br/>
+DONE: added dependency credit card scanner 
+
+```yaml
+credit_card_scanner: ^1.0.5               # <-- card camera scan capture
+```
+
+STILL-TODO CARD CAPTURE IOS: <br/>
+Once you run flutter build ios a Podfile and Podfile.lock will be created for you in the ios directory.
+- The minimum target for iOS should be >= 12.0.0
+- Comment out the use_frameworks! line from under Podfile of your Flutter project.  You can find this Podfile under your_flutter_project/ios/Podfile
 
 
 <br/>
-Ensure cards are only shown from session (x hours)
-Capture Card From Camera 
 Styling And Error Messages
 Tests

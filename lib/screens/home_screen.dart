@@ -1,6 +1,8 @@
+import 'package:cardly/classes/card_issuers.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:intl/intl.dart';
+import 'package:credit_card_scanner/credit_card_scanner.dart';
 
 import 'package:cardly/blocs/card_bloc.dart';
 import 'package:cardly/blocs/card_provider.dart';
@@ -118,7 +120,32 @@ class _HomeScreenState extends State<HomeScreen> {
               lg: 6,
               child: Center(
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var cardDetails = await CardScanner.scanCard();
+
+                    if (cardDetails != null) {
+                      String? cardIssuer;
+
+                      if (cardDetails.cardIssuer ==
+                          CardIssuer.visa.toString()) {
+                        cardIssuer = CardIssuers.visa;
+                      } else if (cardDetails.cardIssuer ==
+                          CardIssuer.mastercard.toString()) {
+                        cardIssuer = CardIssuers.mastercard;
+                      } else {
+                        cardIssuer = CardIssuers.kdefault;
+                      }
+
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddCardScreen(
+                                    paramCardNumber: cardDetails.cardNumber,
+                                    paramCardIssuer: cardIssuer,
+                                  )));
+                    }
+                  },
                   icon: const Icon(
                     Icons.add_a_photo_outlined,
                     size: 24.0,
@@ -144,9 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Card Number: ${card.number}"),
-                    card.cardType == 'DEFAULT'
+                    card.cardType == CardIssuers.kdefault
                         ? const Text('...')
-                        : card.cardType == 'VISA'
+                        : card.cardType == CardIssuers.visa
                             ? Image.asset(
                                 'assets/visa.png',
                                 scale: 5,
