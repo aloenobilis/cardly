@@ -45,10 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
         for (var item in response.payload) {
           countries.add(item.country);
         }
-
         setState(() {
           statNumberCards = response!.payload.length.toString();
-          statNumberCountries = countries.toSet().toList().length.toString();
+          statNumberCountries = countries.toSet().length.toString();
           cards = response.payload;
           isLoading = false;
         });
@@ -100,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  text: '$statNumberCards \n',
+                  text: '$statNumberCountries \n',
                   style: const TextStyle(
                       fontSize: 32,
                       color: Colors.teal,
@@ -319,7 +318,11 @@ class _HomeScreenState extends State<HomeScreen> {
           // CARDS FROM TODAY LIST
           errorMessageGetCards == null
               ? ResponsiveGridCol(
-                  child: cards.isEmpty ? const Text("No cards") : cardList())
+                  child: cards.isEmpty
+                      ? const Center(
+                          child: Text("Try adding a card."),
+                        )
+                      : cardList())
               : ResponsiveGridCol(
                   child: Text(
                   errorMessageGetCards!,

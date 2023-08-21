@@ -86,6 +86,12 @@ Once you run flutter build ios a Podfile and Podfile.lock will be created for yo
 ### 1.9 - styling 
 DONE: added styling and padding where needed <br/>
 
-<br/>
-Styling
-Tests
+### 1.10 - tests
+DONE: added bloc validation tests (positives) <br/>
+DONE: added bank card model test <br/>
+DONE: added banned countries model test 
+
+
+NEXT:
+write up
+ios build
