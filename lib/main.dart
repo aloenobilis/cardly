@@ -1,9 +1,11 @@
-import 'package:cardly/resources/db_provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cardly/resources/db_provider.dart';
+import 'package:cardly/screens/banned_countries_screen.dart';
 import 'package:cardly/screens/add_card_screen.dart';
 import 'package:cardly/screens/home_screen.dart';
 import 'package:cardly/blocs/card_provider.dart';
+import 'package:cardly/blocs/banned_countries_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,22 +18,26 @@ class Cardly extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CardProvider(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        themeMode: ThemeMode.dark,
-        theme: ThemeData(
-          iconTheme: const IconThemeData(color: Colors.black54),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+    return BannedCountriesProvider(
+      child: CardProvider(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          themeMode: ThemeMode.light,
+          theme: ThemeData(
+            iconTheme: const IconThemeData(color: Colors.black54),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData.dark(),
+          initialRoute: HomeScreen.id,
+          routes: {
+            HomeScreen.id: (context) => const HomeScreen(),
+            AddCardScreen.id: (context) => const AddCardScreen(),
+            BannedCountriesScreen.id: (context) =>
+                const BannedCountriesScreen(),
+          },
         ),
-        darkTheme: ThemeData.dark(),
-        initialRoute: HomeScreen.id,
-        routes: {
-          HomeScreen.id: (context) => const HomeScreen(),
-          AddCardScreen.id: (context) => const AddCardScreen(),
-        },
       ),
     );
   }

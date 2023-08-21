@@ -7,6 +7,7 @@ import 'package:cardly/blocs/card_provider.dart';
 import 'package:cardly/classes/response.dart';
 import 'package:cardly/models/bankcard.dart';
 import 'package:cardly/screens/add_card_screen.dart';
+import 'package:cardly/screens/banned_countries_screen.dart';
 import 'package:cardly/widgets/loader.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -186,11 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget drawer() {
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
@@ -200,10 +197,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text('Settings'),
           ),
           ListTile(
-            title: const Text('Confgure Banned Countries'),
+            title: const Text('Configure Banned Countries'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BannedCountriesScreen()));
             },
           ),
         ],

@@ -53,10 +53,15 @@ DONE: added dependency ```intl``` for data formatting
 intl: ^0.18.1                             # <-- date formatting
 ```
 
+### 1.5 - banned countries 
+DONE: banned countries model (.countries List<String> -> TEXT :> jsonEncode|jsonDecode) <br/>
+DONE: banned countries bloc and provider (method: add, get) <br/>
+DONE: banned countries screen for adding and viewing banned countries 
 
-NEXT: 
-STILL-TODO NOTE: CardBloc ensure country is not in banned countries when adding card (model, screen)
+
 <br/>
+Ensure when adding a card that its not within banned countries 
+Ensure cards are only shown from session (x hours)
 Capture Card From Camera 
 Styling And Error Messages
 Tests

@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+import 'package:cardly/models/bannedcountries.dart';
 import 'package:cardly/models/bankcard.dart';
 import 'package:cardly/classes/response.dart';
 
@@ -27,7 +28,57 @@ class DbProvider {
           created TEXT
         )
         ''');
+      newDb.execute('''
+        CREATE TABLE BannedCountries
+        (
+          id INTEGER PRIMARY KEY,
+          countries TEXT
+        )
+        ''');
     });
+  }
+
+  /// Takes an existing ``BannedCountries`` and inserts it into the database.
+  /// A single record is ensured as the id property is kept on the model when
+  /// it is retreived from the database and when inserted using a conflict
+  /// algorithm of replace the existing record (matched by its id) is replaced.
+  Future<DbProviderResponse> addBannedCountry(
+      BannedCountries bannedcountries) async {
+    try {
+      int _ = await db!.insert('BannedCountries', bannedcountries.toMapForDb(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    } catch (err) {
+      return DbProviderResponse(
+          payload: null, errorMessage: "Could not add the country.");
+    }
+    return DbProviderResponse(payload: true);
+  }
+
+  /// Default ``BannedCountries.countries`` to an empty list if there are
+  /// no records in the database.
+  /// The payload will be the first item in the List as only one record will
+  /// exist in the table 'BannedCountries'.
+  Future<DbProviderResponse> getBannedCountry() async {
+    BannedCountries? bannedcountry;
+
+    try {
+      List<Map<String, dynamic>>? maps =
+          await db!.query('BannedCountries', columns: null);
+
+      // ignore: unnecessary_null_comparison
+      if (maps != null) {
+        if (maps.isEmpty) {
+          return DbProviderResponse(payload: BannedCountries(countries: []));
+        } else {
+          bannedcountry = BannedCountries.fromDb(maps[0]);
+        }
+      }
+    } catch (err) {
+      return DbProviderResponse(
+          payload: null, errorMessage: "Could not retreive banned countries");
+    }
+
+    return DbProviderResponse(payload: bannedcountry);
   }
 
   /// Adds a card to the database.
@@ -68,6 +119,7 @@ class DbProvider {
         }
       }
     } catch (err) {
+      // TODO: handle get cards with error response
       print("ERROR DB PROVIDER: $err");
     }
 
